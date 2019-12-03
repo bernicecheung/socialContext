@@ -12,7 +12,7 @@ container=containers/fmriprep-1.4.0.simg
 freesurferlicense=/projects/sanlab/shared/containers/license.txt
 bids_dir=${user_dir}/${study}/bids_data
 derivatives=${bids_dir}/derivatives
-working_dir=${derivatives}/scratch/
+working_dir=${derivatives}/scratch
 image=${group_dir}/${container}
 
 # Set subject ID
