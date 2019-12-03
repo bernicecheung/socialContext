@@ -37,7 +37,7 @@ cd ${bids_dir}
 echo -e \nStarting on: ${subid}
 echo -e \n
 
-singularity run --bind ${group_dir}:${group_dir} ${image} ${bids_dir} ${derivatives} participant \
+singularity run --bind ${user_dir}:${user_dir} ${image} ${bids_dir} ${derivatives} participant \
 				--participant_label ${subid} \
 				-w ${working_dir} \
 				--nthreads 1 \
