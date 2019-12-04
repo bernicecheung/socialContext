@@ -5,10 +5,10 @@
 # in the derivatives folder.
 
 # Set directories
-group_dir=/projects/sanlab/shared
+group_dir=/projects/sanlab
 user_dir=/projects/sanlab/kcheung3
 study=socialContext
-container=containers/fmriprep-1.4.0.simg
+container=shared/containers/fmriprep-1.4.0.simg
 freesurferlicense=/projects/sanlab/shared/containers/license.txt
 bids_dir=${user_dir}/${study}/bids_data
 derivatives=${bids_dir}/derivatives
@@ -37,7 +37,7 @@ cd ${bids_dir}
 echo -e \nStarting on: ${subid}
 echo -e \n
 
-singularity run --bind ${user_dir}:${user_dir} ${image} ${bids_dir} ${derivatives} participant \
+singularity run --bind ${group_dir}:${group_dir} ${image} ${bids_dir} ${derivatives} participant \
 				--participant_label ${subid} \
 				-w ${working_dir} \
 				--nthreads 1 \
