@@ -16,7 +16,7 @@ freesurferlicense=/projects/sanlab/shared/containers/license.txt
 study=socialContext
 
 # Set subject list
-sublist=`cat subject_list_test.txt`
+sublist=`cat fmriprep_list.txt`
 
 # Submit fmriprep jobs for each subject
 for sub in ${sublist}; do
