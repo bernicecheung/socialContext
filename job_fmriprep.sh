@@ -5,11 +5,6 @@
 # in the derivatives folder.
 
 # Set directories
-group_dir=/projects/sanlab
-user_dir=/projects/sanlab/kcheung3
-study=socialContext
-container=shared/containers/fmriprep-1.4.0.simg
-freesurferlicense=/projects/sanlab/shared/containers/license.txt
 bids_dir=${user_dir}/${study}/bids_data
 derivatives=${bids_dir}/derivatives
 working_dir=${derivatives}/scratch
