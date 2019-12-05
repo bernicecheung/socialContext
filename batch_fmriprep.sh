@@ -28,9 +28,9 @@ sbatch --export ALL,subid=${SUBID},group_dir=${group_dir},user_dir=${user_dir},s
         --job-name ${SUBID}_fMRIprep \
         --partition=ctn \
         --account=sanlab \
-	--mem=10G \
-  --time=5-00:00:00 \
-  --cpus-per-task=8 \
+	--mem=20G \
+  --time=1-00:00:00 \
+  --cpus-per-task=16 \
 	-o ${user_dir}/${study}/fMRIPrep/output/${SUBID}_fmriprep_output.txt \
 	-e ${user_dir}/${study}/fMRIPrep/output/${SUBID}_fmriprep_error.txt \
 	job_fmriprep.sh
