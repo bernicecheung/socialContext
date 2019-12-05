@@ -32,8 +32,9 @@ echo -e \n
 singularity run --bind ${group_dir}:${group_dir} ${image} ${bids_dir} ${derivatives} participant \
 				--participant_label ${subid} \
 				-w ${working_dir} \
-				--nthreads 8 \
-				--mem-mb 100000 \
+				--nthreads 16 \
+				--omp-nthreads 16 \
+				--mem-mb 200000 \
 				--fs-license-file ${freesurferlicense} \
 				--fs-no-reconall \
 				--fd-spike-threshold 0.2 \
