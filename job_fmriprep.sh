@@ -10,9 +10,6 @@ derivatives=${bids_dir}/derivatives
 working_dir=${derivatives}/scratch
 image=${group_dir}/${container}
 
-# Set subject ID
-subid=01
-
 echo -e \nFmriprep on ${subid}
 echo -e \nContainer: ${image}
 echo -e \nSubject directory: ${bids_dir}
@@ -40,6 +37,7 @@ singularity run --bind ${group_dir}:${group_dir} ${image} ${bids_dir} ${derivati
 				--fs-license-file ${freesurferlicense} \
 				--fs-no-reconall \
 				--fd-spike-threshold 0.2 \
+				--output-spaces MNI152NLin2009cAsym
 
 
 echo -e \n
