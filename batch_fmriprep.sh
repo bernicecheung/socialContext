@@ -24,8 +24,8 @@ for sub in ${sublist}; do
 SUBID=`echo $sub|awk '{print $1}' FS=,`
 SESSID=`echo $sub|awk '{print $2}' FS=,`
 
-sbatch --export ALL,subid=${sub},group_dir=${group_dir},user_dir=${user_dir},study=${study},container=${container},freesurferlicense=${freesurferlicense} \
-        --job-name socialContext_fMRIprep \
+sbatch --export ALL,subid=${SUBID},group_dir=${group_dir},user_dir=${user_dir},study=${study},container=${container},freesurferlicense=${freesurferlicense} \
+        --job-name ${SUBID}_fMRIprep \
         --partition=ctn \
         --account=sanlab \
 	--mem=10G \
