@@ -34,7 +34,7 @@ singularity run --bind ${group_dir}:${group_dir} ${image} ${bids_dir} ${derivati
 				-w ${working_dir} \
 				--nthreads 16 \
 				--omp-nthreads 16 \
-				--mem-mb 200000 \
+				--low-mem \
 				--fs-license-file ${freesurferlicense} \
 				--fs-no-reconall \
 				--fd-spike-threshold 0.2 \
