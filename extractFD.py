@@ -8,6 +8,7 @@ Created on Wed Aug  7 06:52:54 2019
 
 import pandas as pd
 from glob import glob
+import numpy as np
 
 subIDs = ["%.2d" % i for i in range(1, 43)]
 subIDs.remove("05")
@@ -22,8 +23,7 @@ for subNum in subIDs:
 
     for runNum in runIDs:
         print "start with run {}".format(runNum)
-        
-       
+
         runFileDir = '/home/kcheung3/sanlab/socialContext/bids_data/derivatives/fmriprep/sub-{}/func/*run-{}_desc-confounds_regressors.tsv'.format(subNum,runNum)
     
         runFile = glob(runFileDir)
@@ -35,15 +35,19 @@ for subNum in subIDs:
     
         if runFile:
             fullDf = pd.read_csv(runFile[0], sep='\t')
-            fd = fullDf['framewise_displacement']
-            outlierDf.at[rowIdx, 'FD_mean'] = fd.mean()
-            outlierDf.at[rowIdx, 'FD_max'] = fd.max()
-            outlierDf.at[rowIdx, 'FD_sd'] = fd.std()
+            fd = fullDf['framewise_displacement'].values
+            fd_mean = round(np.nanmean(fd), 3)
+            fd_max = round(np.nanmax(fd), 3)
+            fd_std = round(np.nanstd(fd), 3)
+            outlierDf.at[rowIdx, 'FD_mean'] = fd_mean
+            outlierDf.at[rowIdx, 'FD_max'] = fd_max
+            outlierDf.at[rowIdx, 'FD_sd'] = fd_std
             
             for T in threshold:
-                outlier = fd[fd > T]
-                outlierDf.at[rowIdx, T] = len(outlier)
+                outliers = np.count_nonzero(fd > T)
+                outlierDf.at[rowIdx, T] = outliers
            
         rowIdx = rowIdx + 1    
 
 outlierDf.to_csv('/home/kcheung3/sanlab/socialContext/fMRIPrep/qc/thresholdTestOutput.csv', index=False)
+
