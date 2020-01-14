@@ -11,6 +11,7 @@ from glob import glob
 import argparse
 import numpy as np
 
+#
 # define input
 parser = argparse.ArgumentParser(description='provide all the subject IDs and run numbers')
 parser.add_argument('-maxSubID', default=None, type=int,
@@ -30,7 +31,7 @@ parser.add_argument('--minSubID', default=1, type=int,
 # store inputs
 my_input = parser.parse_args()
 
-# transform fd threshold to numatic
+# transform fd threshold to numeric
 fd_threshold = float(my_input.fd_threshold)
 
 # generate a list of subject IDs and run numbers
@@ -60,32 +61,29 @@ for subNum in subIDs:
             # extract the confound file as a dataframe
             fullDf = pd.read_csv(runFile[0], sep='\t')
 
-            # Extract columns for motion parameters
-            motion_cols = ['trans_x', 'trans_x_derivative1', 'trans_y', 'trans_y_derivative1', 'trans_z',
+            # subset the dataframe with motion parameters and fd columns
+            select_cos = ['trans_x', 'trans_x_derivative1', 'trans_y', 'trans_y_derivative1', 'trans_z',
                            'trans_z_derivative1', 'rot_x', 'rot_x_derivative1', 'rot_y', 'rot_y_derivative1', 'rot_z',
-                           'rot_z_derivative1']
+                           'rot_z_derivative1', 'framewise_displacement']
+            selectDf = fullDf.filter(items=select_cos)
 
-            # extract columns for all fd outliers
-            outlier_cols = [col for col in fullDf.columns if 'motion_outlier' in col]
+            # replace NaN with 0s
+            selectDf = selectDf.fillna(0)
 
-            # extract the framewise displacement value corresponding to each outlier columns
-            fd_idx = [list(np.where(fullDf[col] == 1)[0])for col in outlier_cols]
-            fd = [fullDf.framewise_displacement[idx].values for idx in fd_idx]
+            # loop through each row
+            motionOutlier_count = 0
+            row_count = len(selectDf.index)
 
-            # select the outlier columns that have fd values larger than the fd threashold input
-            select = [value > fd_threshold for value in fd]
-            outlier_select = [i for i, j in zip(outlier_cols, select) if j]
+            for idx, fd in enumerate(selectDf.framewise_displacement):
 
-            # combine columns for motion parameters and fd outliers
-            select_cols = motion_cols + outlier_select
+                if fd > fd_threshold:
+                    col_content = [0] * row_count
+                    col_content[idx] = 1
+                    selectDf['motion_outlier%.2d' % motionOutlier_count] = col_content
 
-            print(select_cols)
 
-            # subset the confound dataset
-            selectDf = fullDf[select_cols]
-
-            # replace all NaN with O
-            updateDf = selectDf.fillna(0)
+            # delete the fd column
+            finalDf = selectDf.drop(columns=['framewise_displacement'])
 
             # write relevant columns into a csv file
             selectDf.to_csv(my_input.out_dir + 'sub-{}_run-{}_confound.txt'.format(subNum, runNum), header=None, index=None, sep=' ')
