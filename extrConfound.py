@@ -79,7 +79,7 @@ for subNum in subIDs:
             print(select_cols)
 
             selectDf = fullDf[select_cols]
-            selectDf.fillna(0)
+            updateDf = selectDf.fillna(0)
 
             # replace NaN with 0 --> may need to change
             # updateDf = selectDf.fillna(0)
