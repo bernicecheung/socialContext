@@ -8,11 +8,10 @@
 #SBATCH --cpus-per-task=1               ### Number of CPU needed for the job
 #SBATCH --mem=1G              ### Total memory
 
-module load prl
-module load python/2.7.13
+module load python2/2.7.13
 
 python /home/kcheung3/sanlab/socialContext/MVPA_prep/scripts/extrConfound.py  \
-  -maxSubID 1  \
+  -maxSubID 42  \
   -maxRunNum 4  \
   -BIDS_dir /home/kcheung3/sanlab/socialContext/bids_data/ \
   -out_dir /home/kcheung3/sanlab/socialContext/MVPA_prep/confounds/ \
