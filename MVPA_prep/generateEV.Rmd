@@ -1,0 +1,121 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+load library
+```{r}
+library(readr)
+library(readbulk)
+```
+
+load data
+```{r}
+rawDf <- read_bulk(directory = "./rawData", extension = ".csv", fun = read.csv)
+```
+
+check missing catch trial
+```{r}
+# subset dataset of missing catch trials
+catchDf <- subset(rawDf,currentCatch == 1)
+catchDf_NA <- subset(catchDf,response == -99)
+
+# frequency table of missing catch trials per subject per run
+catchDf_NA$runNum <- factor(catchDf_NA$runNum)
+missingCatchPerRun <- by(catchDf_NA$runNum, catchDf_NA$subID, function(x) as.numeric(table(x)))
+
+# generate a summary dataset
+subId <- unique(catchDf_NA$subID)
+subId <- subId[order(subId)]
+missingCatchSum <- data.frame("subId" = rep(subId, each = 4),
+                              "runNum" = rep(1:4,16),
+                              "totalNum" = unlist(missingCatchPerRun))
+
+missingCatchSum$context <- c("s","f","s","f",
+                             "s","f","f","s",
+                             "f","s","s","f",
+                             "s","f","f","s",
+                             "f","s","f","s",
+                             "s","f","f","s",
+                             "f","s","s","f",
+                             "f","s","f","s",
+                             "f","s","f","s",
+                             "f","s","s","f",
+                             "f","s","f","s",
+                             "f","s","s","f",
+                             "s","f","s","f",
+                             "f","s","f","s",
+                             "f","s","f","s",
+                             "f","s","s","f")
+# export dataset
+write.csv(missingCatchSum, "./output/missCatchSum.csv", row.names = F)
+```
+
+generate a conditional file
+```{r}
+# subset dataset -- extract info of the first trial in each run
+firstTrailDf <- subset(rawDf, trialInRun ==1)
+
+# extract subId and context info
+contextDf <- firstTrailDf[,c("subID","currentContext")]
+
+# add sub 5 with NA as the context, and reorder the dataset based on subID
+sub5Df <- data.frame("subID" = c(5,5,5,5),
+                     "currentContext" = c(NA,NA,NA,NA))
+
+contextDf <- rbind(contextDf,sub5Df)
+contextDf <- contextDf[order(contextDf$subID),]
+
+write.table(contextDf[,2], file = "./output/contextDf.txt", sep = "\t",
+            row.names = FALSE,col.names = FALSE,quote = FALSE)
+
+```
+
+generate a datset for stimulus presentation & EV file
+```{r}
+stimulusDfList <-list()
+# only include rows that represent a trial
+cleanedDf <- rawDf[is.na(rawDf$trialInRun) == F,]
+cleanedDf <- cleanedDf[order(cleanedDf$subID),]
+colnames(cleanedDf)[colnames(cleanedDf)=="currentTraitIdx.1"] <- "currentTrait"
+# loop through each subject, and extract trial and stimulus information
+subIDs <- unique(cleanedDf$subID)
+
+Idx <- 1
+for(i in subIDs){
+  subDf <- subset(cleanedDf, subID == i)
+  nRuns <- unique(subDf$runNum)
+  
+  for (j in nRuns){
+    runDf <- subset(subDf, runNum ==j)
+    runDf <- runDf[order(runDf$trialInRun),]
+    # only extract rows with unique trial number
+    runDf <- runDf[unique(runDf$trialInRun),]
+    # extract rows that are not for catch trials
+    cleanedRunDf <- subset(runDf,is.nan(currentCatch))
+    
+    # extract stimulus onset time to generate 3-column EV files
+    threeColumn <- data.frame("onsetTime" = cleanedRunDf$currentOnsetPTime,
+                              "duration" = 3,
+                              "magnitude" = 1)
+    
+    # write the file
+    write.table(threeColumn,paste0("./output/EV/sub-",sprintf("%02d",i),"_run",j,"_EV_MVPA.txt"), sep = " ",
+          row.names = FALSE, col.names = FALSE)
+    
+    # extract columns relevent to stimulus presentation
+    stimulusDfList[[Idx]] <- cleanedRunDf[,c("subID","order","runNum","currentContext","trialInRun","currentTrial","currentOnsetPTime","currentTrait")]
+    
+    Idx <- Idx + 1
+  }#end of nRuns loop
+} #end of subject loop
+
+stimulusDf <- do.call("rbind",stimulusDfList)
+
+stimulusDf <-stimulusDf[
+  with(stimulusDf, order(subID, runNum,trialInRun)),
+]
+
+write.csv(stimulusDf,"./output/stimulusDf.csv", row.names = F)
+```
+
+
