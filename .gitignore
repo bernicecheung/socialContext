@@ -1,0 +1,13 @@
+.DS_Store
+**/.DS_Store
+/bids_data/*
+/confounds/*
+/raw_data/*
+test.sh
+sub-01_run-1_EV_MVPA.txt
+MVPA_prep/FSL_level1/scripts/Feat-1_talapas_test.sh
+.DS_Store
+fMRIPrep_script/fmriprep_list.txt
+MVPA_prep/FSL_level1/confounds/*
+MVPA_prep/FSL_level1/EV/*
+MVPA_prep/FSL_level1/model/*
