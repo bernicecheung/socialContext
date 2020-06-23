@@ -63,10 +63,13 @@ do
     sed -e 's:'$oldBold':'$newBold':g' -e 's:sub-01:sub-'$subNum':g' -e 's:run-1:run-'$runNum':g' -e 's:task-friend:task-'$condition':g' -e 's:/Users/BerniceCheung/Documents/Bernice/socialContext:'$home_dir':g'  <"$templateFile"> "$outputDir"/sub-"$subNum"_task-"$condition"_run-"$runNum".fsf
 
     echo
-    echo "run FEAT level 1"
+    echo Complete with run $runNum
+    #echo "run FEAT level 1"
 
     #  feed the design file to FEAT to run level-1 process
-    #feat "$outputDir"/sub-"$subNum"_run-"$runNum"_"$condition".fsf
+    #feat "$outputDir"/sub-"$subNum"_task-"$condition"_run-"$runNum".fsf
   done
 
+  echo
+  echo Complete with sub $subNum
 done
