@@ -1,12 +1,31 @@
 #!/bin/bash
-#SBATCH --partition=ctn        ### Partition (like a queue in PBS)
-#SBATCH --job-name=socialContext_Feat_level1      ### Job Name
-#SBATCH --output=/projects/sanlab/kcheung3/socialContext/talapas_output/feat_level1.out         ### File in which to store job output
-#SBATCH --error=/projects/sanlab/kcheung3/socialContext/talapas_output/feat_level1.err          ### File in which to store job error messages
-#SBATCH --time=0-01:00:00       ### Wall clock time limit in Days-HH:MM:SS
-#SBATCH --cpus-per-task=8               ### Number of CPU needed for the job
-#SBATCH --mem=100G              ### Total memory
-#SBATCH --account=sanlab      ### Account used for job submission
 
-chmod +777 /projects/sanlab/kcheung3/socialContext/MVPA_prep/FSL_level1/scripts/Feat-1.sh
-/projects/sanlab/kcheung3/socialContext/MVPA_prep/FSL_level1/scripts/Feat-1.sh /projects/sanlab/kcheung3/socialContext 1 2
+# set task parameters
+# subject ID to start with
+start_id=$1
+# subject ID to end with
+end_id=$2
+
+module load fsl/5.0.10
+
+for ((id=$start_id; id<=$end_id; id++))
+do
+  # convert the id to the correct format
+  subNum=$(printf "%02d" $id)
+
+  for runNum in {1..4}
+  do
+
+    sbatch --partition=ctn \
+	 	--job-name=socialContext_Feat_level1 \
+	 	--output=/projects/sanlab/kcheung3/socialContext/talapas_output/feat_level1_sub-"$subNum"_run-"$runNum".out \
+    --error=/projects/sanlab/kcheung3/socialContext/talapas_output/feat_level1_sub-"$subNum"_run-"$runNum".err \
+    --time=1-00:00:00 \
+    --cpus-per-task=1 \
+	 	--mem-per-cpu=8G \
+	 	--account=sanlab \
+    feat /projects/sanlab/kcheung3/socialContext/MVPA_prep/FSL_level1/model/sub-"$subNum"/design/sub-"$subNum"_*_run-"$runNum".fsf
+
+  done  # run loop
+
+done # subject loop
