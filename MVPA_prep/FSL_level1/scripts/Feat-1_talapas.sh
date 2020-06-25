@@ -16,6 +16,8 @@ do
   for runNum in {1..4}
   do
 
+    /packages/racs/bin/slurm-throttle
+
     sbatch --partition=ctn \
 	 	--job-name=socialContext_Feat_level1 \
 	 	--output=/projects/sanlab/kcheung3/socialContext/talapas_output/feat_level1_sub-"$subNum"_run-"$runNum".out \
