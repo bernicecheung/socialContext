@@ -1,0 +1,34 @@
+---
+title: "socialContext_genAttFile"
+author: "Bernice Cheung"
+date: "7/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+generate the attribution file for the friend context:  
+64 traits. target: "friend", chunk: 1
+```{r}
+friendFile <- data.frame(target = rep("friend", 64),
+                         chunk = rep(1, 64))
+```
+
+generate the attribution file for the friend context:  
+64 traits. target: "friend", chunk: 1
+```{r}
+schoolFile <- data.frame(target = rep("school", 64),
+                         chunk = rep(1, 64))
+```
+
+write the files
+```{r}
+write.table(friendFile, file = "../attributionFiles/friend_att.txt", sep = "\t",
+            row.names = FALSE, col.names = FALSE, quote = FALSE)
+
+write.table(schoolFile, file = "../attributionFiles/school_att.txt", sep = "\t",
+            row.names = FALSE, col.names = FALSE, quote = FALSE)
+```
+
