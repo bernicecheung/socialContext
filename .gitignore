@@ -13,3 +13,4 @@ MVPA_prep/FSL_level1/EV/*
 MVPA_prep/FSL_level1/model/*
 /brainMask/*
 RSA/ratingRDM/*
+RSA/neuralRDM/*
