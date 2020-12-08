@@ -16,3 +16,6 @@ RSA/neuralRDM/*
 /socialContext_venv/
 /.vscode/
 RSA/.vscode/settings.json
+/outputs/*
+.Rhistory
+/scratch/*
