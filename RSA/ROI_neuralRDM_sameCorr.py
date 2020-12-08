@@ -158,5 +158,5 @@ if __name__ == "__main__":
 
     # write the dataframe
     output_dir = os.path.join(root_dir,'RSA', 'outputs', f'neuralRDM_sameCorr_ROI_{context}.csv')
-    sameContextCorrDf.to_csv('output_dir')
+    sameContextCorrDf.to_csv(output_dir)
 
