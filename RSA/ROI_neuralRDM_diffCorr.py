@@ -3,7 +3,7 @@ This script is used to calculate the correlation between the neural RDMs of runs
 '''
 
 import os
-import glob
+from glob import glob
 import numpy as np
 import pandas as pd
 import argparse
@@ -20,9 +20,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Social Context ROI parameters')
     parser.add_argument('--rootDir', dest='rootDir', default='', help='Path to the root directory of BIDS data')
     parser.add_argument('--friendOrder', dest='friendOrder', default='', type=str,
-                        choices=[1, 2], help='Choose the run order for the friend context')
+                        choices=["1", "2"], help='Choose the run order for the friend context')
     parser.add_argument('--schoolOrder', dest='schoolOrder', default='', type=str,
-                        choices=[1, 2], help='Choose the run order for the school context')
+                        choices=["1", "2"], help='Choose the run order for the school context')
 
     # generate inputs
     inputs = parser.parse_args()
