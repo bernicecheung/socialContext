@@ -85,7 +85,7 @@ if __name__ == "__main__":
         preLen = len("/RSA/neuralRDM/sub-01/sub-01_friend_order-1_ROI-")
         postLen = len("-neuralRDM.csv")
 
-        friend_RDM_fileNames = sorted(glob(friend_namePatten, recursive=True), key=lambda name: int(name[108:-14]))
+        friend_RDM_fileNames = sorted(glob(friend_namePatten, recursive=True), key=lambda name: int(name[rootLen + preLen]))
 
         # import csv files for each ROI into a list
         friend_neuralCSV = [pd.read_csv(f) for f in friend_RDM_fileNames]
@@ -98,7 +98,7 @@ if __name__ == "__main__":
         # grab all file names correspoding to the school run, and re-order them based on ROI number
         school_namePatten = f'{sub_neuralRDM_dir}/*_school_order-{schoolOrder}_*'
         preLen = len("/RSA/neuralRDM/sub-01/sub-01_school_order-1_ROI-")
-        school_RDM_fileNames = sorted(glob(school_namePatten, recursive=True), key=lambda name: int(name[108:-14]))
+        school_RDM_fileNames = sorted(glob(school_namePatten, recursive=True), key=lambda name: int(name[rootLen + preLen]))
         
         # import csv files for each ROI into a list
         school_neuralCSV = [pd.read_csv(f) for f in school_RDM_fileNames]
