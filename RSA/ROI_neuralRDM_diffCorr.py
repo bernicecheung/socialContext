@@ -79,6 +79,12 @@ if __name__ == "__main__":
 
         # grab all file names correspoding to the friend run, and re-order them based on ROI number
         friend_namePatten = f'{sub_neuralRDM_dir}/*_friend_order-{friendOrder}_*'
+
+        # count the number of string before the ROI number and after the ROI number
+        rootLen = len(root_dir)
+        preLen = len("/RSA/neuralRDM/sub-01/sub-01_friend_order-1_ROI-")
+        postLen = len("-neuralRDM.csv")
+
         friend_RDM_fileNames = sorted(glob(friend_namePatten, recursive=True), key=lambda name: int(name[108:-14]))
 
         # import csv files for each ROI into a list
@@ -91,6 +97,7 @@ if __name__ == "__main__":
         
         # grab all file names correspoding to the school run, and re-order them based on ROI number
         school_namePatten = f'{sub_neuralRDM_dir}/*_school_order-{schoolOrder}_*'
+        preLen = len("/RSA/neuralRDM/sub-01/sub-01_school_order-1_ROI-")
         school_RDM_fileNames = sorted(glob(school_namePatten, recursive=True), key=lambda name: int(name[108:-14]))
         
         # import csv files for each ROI into a list
