@@ -22,7 +22,7 @@ nilearn==0.6.2
 nltools==0.4.2
 num2words==0.5.10
 numexpr==2.7.1
-numpy==1.19.1
+numpy==1.22.0
 packaging==20.4
 pandas==1.1.1
 parso==0.7.1
